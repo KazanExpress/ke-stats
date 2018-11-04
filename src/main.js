@@ -7,7 +7,17 @@ import store from './store'
 
 Vue.use(ElementUI);
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
+
+router.beforeEach((to, from, next) => {
+  console.log("Before EACH");
+  if (to.path !== '/login' && !store.getters.username) {
+    console.log("Redirect to login");
+    alert("You need to authorize");
+    return next("/login");
+  }
+  return next();
+});
 
 new Vue({
   router,
