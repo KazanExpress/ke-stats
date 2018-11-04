@@ -7,15 +7,22 @@ export default new Vuex.Store({
   state: {
     username: '',
     access_token: '',
-    basic_token: ''
+    basic_token: '',
+    loading: false
   },
   mutations: {
     username (state, value) {
       localStorage.setItem('username', value);
       state.username = value;
+    },
+    loading (state, value) {
+      state.loading = value;
     }
   },
   getters: {
+    loading: state => {
+      return state.loading;
+    },
     username: state => {
       console.log("Username: " + state.username);
       console.log(!state.username);

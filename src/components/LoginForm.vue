@@ -1,6 +1,6 @@
 <template>
   <el-form :model="form" status-icon :rules="rules" ref="form" label-width="120px" class="demo-ruleForm"
-           style="width: 50vw; display: inline-block;" v-loading="loading">
+           style="width: 50vw; display: inline-block;">
     <el-form-item label="Login">
       <el-input v-model="form.username" autocomplete="off"></el-input>
     </el-form-item>
@@ -44,15 +44,13 @@
     },
     methods: {
       submitForm(formName) {
-        console.log(formName);
         this.$refs[formName].validate((valid) => {
           if (valid) {
             this.$store.commit('username', this.form.username);
-            this.loading = true;
+            this.$store.commit('loading', true);
             let _this = this;
             setTimeout(function(){
-              _this.loading = false;
-
+              _this.$store.commit('loading', false);
               _this.$router.push('/')
               //do what you need here
             }, 2000);
