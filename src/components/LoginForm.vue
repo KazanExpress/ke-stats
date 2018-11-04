@@ -15,6 +15,8 @@
 </template>
 
 <script>
+  import api from "@/utils/ApiClient.js"
+
   export default {
     name: "LoginForm",
     data() {
@@ -46,14 +48,21 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.$store.commit('username', this.form.username);
-            this.$store.commit('loading', true);
+            let store = this.$store;
             let _this = this;
-            setTimeout(function(){
-              _this.$store.commit('loading', false);
-              _this.$router.push('/')
-              //do what you need here
-            }, 2000);
+            store.commit('loading', true);
+            let apiClient = new api.ApiClient();
+            apiClient.getAccessToken(this.form.username, this.form.pass)
+              .catch(error => {
+                console.log(error);
+                store.commit('loading', false);
+              })
+              .then(res => {
+                console.log(res);
+                _this.saveCredentials(res.access_token);
+                store.commit('loading', false);
+                _this.$router.push('/')
+              });
           } else {
             console.log('error submit!!');
             return false;
@@ -62,6 +71,11 @@
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
+      },
+      saveCredentials(access_token) {
+        let store = this.$store;
+        store.commit('username', this.form.username);
+        store.commit('access_token', access_token);
       }
     }
   }

@@ -15,6 +15,10 @@ export default new Vuex.Store({
       localStorage.setItem('username', value);
       state.username = value;
     },
+    access_token (state, value) {
+      localStorage.setItem('access_token', value);
+      state.access_token = value;
+    },
     loading (state, value) {
       state.loading = value;
     }
