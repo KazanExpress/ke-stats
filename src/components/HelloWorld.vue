@@ -11,13 +11,6 @@ export default {
   name: 'HelloWorld',
   props: {
     msg: String
-  },
-  beforeCreate() {
-    if (!this.$store.getters.username) {
-      console.log("Redirect to login");
-      alert("You need to authorize");
-      this.$router.push("/login");
-    }
   }
 }
 </script>
