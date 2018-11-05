@@ -1,12 +1,15 @@
 <template>
   <el-main class="side-panel-main">
     <div>
-      <el-menu default-active="chart1"
+      <el-menu :default-active="$route.path.substr(1)"
                class="menu-item"
                background-color="#373737"
                text-color="hsla(0,0%,100%,.6)"
                active-text-color="#fff"
                :router="true">
+        <el-menu-item v-show="false" index="">
+          <span>Home</span>
+        </el-menu-item>
         <el-menu-item index="chart1">
           <span>Chart One</span>
         </el-menu-item>

@@ -13,7 +13,8 @@ class ApiClient extends GenericAPIClient {
 
   constructor() {
     super(
-      'http://localhost:8081/',
+      'https://customers.dev.kznexpess.com',
+      // 'http://localhost:8081/',
       {
         headers: {
           'Authorization': 'Basic a2F6YW5leHByZXNzLWN1c3RvbWVyOmN1c3RvbWVyU2VjcmV0S2V5',

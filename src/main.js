@@ -18,7 +18,6 @@ router.beforeEach((to, from, next) => {
     console.log("You do not need to authorize");
     return next("/");
   }
-  console.log(to.path);
   if (to.path === '/login') {
     store.commit('hideAside');
     store.commit('hideHeader');
