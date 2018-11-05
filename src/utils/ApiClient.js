@@ -2,7 +2,6 @@ import {GenericAPIClient, withQuery} from 'kefetchup/dist/kefetchup.es5'
 
 class ApiClient extends GenericAPIClient {
   async responseHandler(resp) {
-    // console.log(resp);
     let wrapper = {status: resp.status};
     if (resp.status >= 400) {
       wrapper.error = true;
@@ -12,7 +11,7 @@ class ApiClient extends GenericAPIClient {
     return wrapper;
   }
 
-  constructor(myVeryImportantSetting) {
+  constructor() {
     super(
       'http://localhost:8081/',
       {
@@ -23,8 +22,6 @@ class ApiClient extends GenericAPIClient {
         }
       }
     );
-    // Set a custom variable to the instace
-    this.myVeryImportantSetting = myVeryImportantSetting;
   }
 
   getImportantThingsList() {

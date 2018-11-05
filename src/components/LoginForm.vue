@@ -58,11 +58,6 @@
         let _this = this;
         this.$store.commit('loading', true);
         this.apiClient.getAccessToken(this.form.username, this.form.pass)
-          .catch(() => {
-            _this.clearCredentials();
-            _this.warnMessage();
-            _this.$store.commit('loading', false);
-          })
           .then(res => {
             console.log(res.status);
             console.log(res.data);
@@ -73,6 +68,11 @@
               _this.saveCredentials(res.data.access_token);
               _this.$router.push('/')
             }
+            _this.$store.commit('loading', false);
+          })
+          .catch(() => {
+            _this.clearCredentials();
+            _this.warnMessage();
             _this.$store.commit('loading', false);
           });
       },
