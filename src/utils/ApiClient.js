@@ -2,7 +2,6 @@ import {GenericAPIClient, withQuery, ResponseException, ResponseErrors} from 'ke
 
 class ApiClient extends GenericAPIClient  {
   responseHandler(resp) {
-    // console.log(resp);
     if (resp.status >= 400) {
       throw new ResponseException(ResponseErrors[resp.status], resp.status, resp);
     }
