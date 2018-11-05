@@ -30,7 +30,7 @@ export default new Vuex.Store({
       state.access_token = value;
     },
     clearCredentials () {
-      this.commit('username', undefined);
+      // this.commit('username', undefined);
       this.commit('access_token', undefined);
     },
     saveCredentials (state, creds) {

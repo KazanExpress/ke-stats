@@ -1,10 +1,12 @@
 <template>
   <el-form :model="form" status-icon :rules="rules" ref="form" class="form">
     <el-form-item label="Login">
-      <el-input v-model="form.username" autocomplete="off" placeholder="example@mail.com"></el-input>
+      <el-input v-model="form.username" @keyup.enter.native="submitForm('form')" autocomplete="off"
+                placeholder="example@mail.com"></el-input>
     </el-form-item>
-    <el-form-item  label="Password" prop="pass" :error="form.passError" :show-message="form.passErrorShow">
-      <el-input type="password" v-model="form.pass" autocomplete="off" placeholder="password"></el-input>
+    <el-form-item label="Password" prop="pass" :error="form.passError" :show-message="form.passErrorShow">
+      <el-input type="password" @keyup.enter.native="submitForm('form')" v-model="form.pass" autocomplete="off"
+                placeholder="password"></el-input>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="submitForm('form')">Login</el-button>
@@ -19,38 +21,42 @@
   export default {
     name: "LoginForm",
     data() {
+      let _this = this;
       let validatePass = (rule, value, callback) => {
-        if (value === '') {
+        if (_this.backendError) {
+          callback(new Error('Credentials are not valid'))
+        } else if (value === undefined || value.length < 8) {
           callback(new Error('Please input the password'));
         } else {
-          if (this.form.checkPass !== '') {
-            this.$refs.form.validateField('checkPass');
-          }
           callback();
         }
       };
       return {
         apiClient: new api.ApiClient(),
+        backendError: false,
         form: {
           pass: '',
           passError: undefined,
           passErrorShow: true,
-          checkPass: '',
           username: ''
         },
         rules: {
           pass: [
-            {validator: validatePass, trigger: 'blur'}
+            {validator: validatePass, trigger: 'blur'},
+            // {validator: backendValidatePass, trigger: 'blur'}
           ]
         },
         loading: false
       };
     },
+    mounted() {
+      this.form.username = this.$store.getters.username;
+    },
     methods: {
       warnMessage() {
-        this.form.pass = undefined;
+        this.backendError = true;
+        this.$refs['form'].validate('pass');
         this.form.passError = 'Credentials are not valid';
-        this.form.passErrorShow = true;
       },
       claimAccessToken() {
         // let _this = this;
@@ -63,7 +69,10 @@
               this.$store.commit('clearCredentials');
               this.warnMessage();
             } else {
-              this.$store.commit('saveCredentials', {username: this.form.username, access_token: res.data.access_token});
+              this.$store.commit('saveCredentials', {
+                username: this.form.username,
+                access_token: res.data.access_token
+              });
               this.claimUserInfo();
               this.$router.push('/')
             }
@@ -88,6 +97,7 @@
         // })
       },
       submitForm(formName) {
+        this.backendError = false;
         this.$refs[formName].validate((valid) => {
           if (valid) {
             this.claimAccessToken();
