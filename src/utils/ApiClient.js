@@ -24,16 +24,16 @@ class ApiClient extends GenericAPIClient {
     );
   }
 
-  getImportantThingsList() {
-    return this.get(withQuery('/api/main/', {}));
-  }
-
   getAccessToken(login, password) {
     return this.post(withQuery('/api/oauth/token', {
       'grant_type': 'password',
       'username': login,
       'password': password
     }))
+  }
+
+  getUserInfo() {
+    // return this.get('/api/');
   }
 }
 

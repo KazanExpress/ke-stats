@@ -1,15 +1,15 @@
 <template>
-  <el-form :model="form" status-icon :rules="rules" ref="form" label-width="120px" class="demo-ruleForm"
+  <el-form :model="form" status-icon :rules="rules" ref="form" class="demo-ruleForm"
            style="width: 50vw; display: inline-block;">
-    <el-form-item label="Login">
-      <el-input v-model="form.username" autocomplete="off"></el-input>
+    <el-form-item>
+      <el-input v-model="form.username" autocomplete="off" placeholder="Login"></el-input>
     </el-form-item>
-    <el-form-item label="Password" prop="pass" :error="form.passError" :show-message="form.passErrorShow">
-      <el-input type="password" v-model="form.pass" autocomplete="off"></el-input>
+    <el-form-item prop="pass" :error="form.passError" :show-message="form.passErrorShow">
+      <el-input type="password" v-model="form.pass" autocomplete="off" placeholder="Password"></el-input>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="submitForm('form')">Login</el-button>
-      <el-button @click="resetForm('form')">Reset</el-button>
+      <el-button @click="resetForm('form')" :disabled="!form.pass">Reset</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -55,31 +55,39 @@
         this.form.passErrorShow = true;
       },
       claimAccessToken() {
-        let _this = this;
+        // let _this = this;
         this.$store.commit('loading', true);
         this.apiClient.getAccessToken(this.form.username, this.form.pass)
           .then(res => {
             console.log(res.status);
             console.log(res.data);
             if (res.error) {
-              _this.clearCredentials();
-              _this.warnMessage();
+              this.$store.commit('clearCredentials');
+              this.warnMessage();
             } else {
-              _this.saveCredentials(res.data.access_token);
-              _this.$router.push('/')
+              this.$store.commit('saveCredentials', {username: this.form.username, access_token: res.data.access_token});
+              this.claimUserInfo();
+              this.$router.push('/')
             }
-            _this.$store.commit('loading', false);
+            this.$store.commit('loading', false);
           })
           .catch(() => {
-            _this.clearCredentials();
-            _this.warnMessage();
-            _this.$store.commit('loading', false);
+            this.$store.commit('clearCredentials');
+            this.warnMessage();
+            this.$store.commit('loading', false);
           });
       },
+      saveUserInfo: function (firstName) {
+        this.$store.commit('firstName', firstName);
+      },
       claimUserInfo() {
-        this.apiClient.getUserInfo().then(res => {
-
-        })
+        // this.apiClient.getUserInfo().then(res => {
+        //   if (res.error) {
+        //     console.log(res.errorMessage)
+        //   } else {
+        //     this.saveUserInfo(res.data.first_name);
+        //   }
+        // })
       },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
@@ -93,17 +101,6 @@
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
-      },
-      clearCredentials() {
-        let store = this.$store;
-        store.commit('username', undefined);
-        store.commit('access_token', undefined);
-      },
-      saveCredentials(access_token) {
-        let store = this.$store;
-        store.commit('username', this.form.username);
-        console.log(access_token);
-        store.commit('access_token', access_token);
       }
     }
   }

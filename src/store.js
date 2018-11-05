@@ -27,6 +27,15 @@ export default new Vuex.Store({
       }
       state.access_token = value;
     },
+    clearCredentials () {
+      this.commit('username', undefined);
+      this.commit('access_token', undefined);
+    },
+    saveCredentials (state, creds) {
+      console.log(creds.username, creds.access_token);
+      this.commit('username', creds.username);
+      this.commit('access_token', creds.access_token);
+    },
     loading (state, value) {
       state.loading = value;
     }
@@ -46,6 +55,5 @@ export default new Vuex.Store({
     }
   },
   actions: {
-
   }
 })
