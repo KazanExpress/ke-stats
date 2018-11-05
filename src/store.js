@@ -12,11 +12,19 @@ export default new Vuex.Store({
   },
   mutations: {
     username (state, value) {
-      localStorage.setItem('username', value);
+      if (!value) {
+        localStorage.removeItem('username')
+      } else {
+        localStorage.setItem('username', value);
+      }
       state.username = value;
     },
     access_token (state, value) {
-      localStorage.setItem('access_token', value);
+      if (!value) {
+        localStorage.removeItem('access_token')
+      } else {
+        localStorage.setItem('access_token', value);
+      }
       state.access_token = value;
     },
     loading (state, value) {
@@ -28,11 +36,8 @@ export default new Vuex.Store({
       return state.loading;
     },
     username: state => {
-      console.log("Username: " + state.username);
-      console.log(!state.username);
       if (!state.username) {
         let username = localStorage.getItem('username');
-        console.log(username);
         if (username) {
           state.username = username;
         }

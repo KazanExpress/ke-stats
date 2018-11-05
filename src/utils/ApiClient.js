@@ -1,12 +1,15 @@
-import {GenericAPIClient, withQuery, ResponseException, ResponseErrors} from 'kefetchup/dist/kefetchup.es5'
+import {GenericAPIClient, withQuery} from 'kefetchup/dist/kefetchup.es5'
 
-class ApiClient extends GenericAPIClient  {
-  responseHandler(resp) {
+class ApiClient extends GenericAPIClient {
+  async responseHandler(resp) {
     // console.log(resp);
+    let wrapper = {status: resp.status};
     if (resp.status >= 400) {
-      throw new ResponseException(ResponseErrors[resp.status], resp.status, resp);
+      wrapper.error = true;
+      wrapper.errorMessage = resp.error;
     }
-    return resp.json();
+    wrapper.data = await resp.json();
+    return wrapper;
   }
 
   constructor(myVeryImportantSetting) {
