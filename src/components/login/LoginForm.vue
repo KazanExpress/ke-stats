@@ -1,11 +1,10 @@
 <template>
-  <el-form :model="form" status-icon :rules="rules" ref="form" class="demo-ruleForm"
-           style="width: 50vw; display: inline-block;">
-    <el-form-item>
-      <el-input v-model="form.username" autocomplete="off" placeholder="Login"></el-input>
+  <el-form :model="form" status-icon :rules="rules" ref="form" class="form">
+    <el-form-item label="Login">
+      <el-input v-model="form.username" autocomplete="off" placeholder="example@mail.com"></el-input>
     </el-form-item>
-    <el-form-item prop="pass" :error="form.passError" :show-message="form.passErrorShow">
-      <el-input type="password" v-model="form.pass" autocomplete="off" placeholder="Password"></el-input>
+    <el-form-item  label="Password" prop="pass" :error="form.passError" :show-message="form.passErrorShow">
+      <el-input type="password" v-model="form.pass" autocomplete="off" placeholder="password"></el-input>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="submitForm('form')">Login</el-button>
@@ -49,7 +48,6 @@
     },
     methods: {
       warnMessage() {
-        console.log(this.form.checkPass);
         this.form.pass = undefined;
         this.form.passError = 'Credentials are not valid';
         this.form.passErrorShow = true;
@@ -107,5 +105,10 @@
 </script>
 
 <style scoped>
-
+  .form {
+    width: 70%;
+    max-width: 350px;
+    margin: 200px 0;
+    padding: 40px;
+  }
 </style>

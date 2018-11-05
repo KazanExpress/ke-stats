@@ -8,7 +8,9 @@ export default new Vuex.Store({
     username: '',
     access_token: '',
     basic_token: '',
-    loading: false
+    loading: false,
+    headerVisible: true,
+    asideVisible: true
   },
   mutations: {
     username (state, value) {
@@ -38,6 +40,18 @@ export default new Vuex.Store({
     },
     loading (state, value) {
       state.loading = value;
+    },
+    hideHeader (state) {
+      state.headerVisible = false;
+    },
+    hideAside (state) {
+      state.asideVisible = false;
+    },
+    showHeader (state) {
+      state.headerVisible = true;
+    },
+    showAside (state) {
+      state.asideVisible = true;
     }
   },
   getters: {
@@ -52,6 +66,15 @@ export default new Vuex.Store({
         }
       }
       return state.username;
+    },
+    access_token: state => {
+      if (!state.access_token) {
+        let access_token = localStorage.getItem('access_token');
+        if (access_token) {
+          state.access_token = access_token;
+        }
+      }
+      return state.access_token;
     }
   },
   actions: {

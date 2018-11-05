@@ -10,10 +10,21 @@ Vue.use(ElementUI);
 Vue.config.productionTip = false;
 
 router.beforeEach((to, from, next) => {
-  if (to.path !== '/login' && !store.getters.username) {
-    console.log("Redirect to login");
-    alert("You need to authorize");
+  if (to.path !== '/login' && !store.getters.access_token) {
+    console.log("You need to authorize");
     return next("/login");
+  }
+  if (to.path === '/login' && !!store.getters.access_token) {
+    console.log("You do not need to authorize");
+    return next("/");
+  }
+  console.log(to.path);
+  if (to.path === '/login') {
+    store.commit('hideAside');
+    store.commit('hideHeader');
+  } else {
+    store.commit('showAside');
+    store.commit('showHeader');
   }
   return next();
 });

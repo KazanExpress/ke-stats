@@ -1,8 +1,6 @@
 <template>
   <div class="hello">
-    <router-link to="/login">
-      <a>/login</a>
-    </router-link>
+    <h1>Home page</h1>
   </div>
 </template>
 

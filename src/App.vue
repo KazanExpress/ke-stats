@@ -2,12 +2,12 @@
   <div id="app">
     <el-container style="height: 100vh" v-loading="$store.getters.loading">
       <el-container>
-        <el-header class="el-main-header">Header</el-header>
+        <el-header v-show="$store.state.headerVisible" class="el-main-header">Header</el-header>
         <el-main class="el-main-main">
           <router-view/>
         </el-main>
       </el-container>
-      <el-aside width="250px" class="el-main-aside">
+      <el-aside v-show="$store.state.asideVisible" width="250px" class="el-main-aside">
         <side-panel></side-panel>
       </el-aside>
     </el-container>
@@ -15,7 +15,7 @@
 </template>
 
 <script>
-  import SidePanel from "@/components/SidePanel.vue"
+  import SidePanel from "@/components/side-panel/SidePanel.vue"
 
   export default {
     components: {
@@ -33,6 +33,10 @@
 
   .el-main-main {
     background: rgba(0, 0, 0, 0.07);
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
   }
 
   .el-main-aside {

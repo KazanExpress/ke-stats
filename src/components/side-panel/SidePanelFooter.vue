@@ -20,6 +20,7 @@
     name: "SidePanelFooter",
     methods: {
       logout() {
+        this.popoverVisible = false;
         this.$store.commit('clearCredentials');
         this.$router.push('/login');
       }
@@ -33,5 +34,8 @@
 </script>
 
 <style scoped>
-
+  .side-panel-footer {
+    border-bottom-color: rgb(0, 0, 0);
+    box-shadow: rgba(0, 0, 0, 0.2) 0 0 3px 0;
+  }
 </style>
