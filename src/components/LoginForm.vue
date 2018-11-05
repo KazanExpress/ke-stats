@@ -49,19 +49,18 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             let store = this.$store;
-            let _this = this;
             store.commit('loading', true);
             let apiClient = new api.ApiClient();
             apiClient.getAccessToken(this.form.username, this.form.pass)
+              .then(res => {
+                console.log(res);
+                this.saveCredentials(res.access_token);
+                store.commit('loading', false);
+                this.$router.push('/')
+              })
               .catch(error => {
                 console.log(error);
                 store.commit('loading', false);
-              })
-              .then(res => {
-                console.log(res);
-                _this.saveCredentials(res.access_token);
-                store.commit('loading', false);
-                _this.$router.push('/')
               });
           } else {
             console.log('error submit!!');
