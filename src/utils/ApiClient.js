@@ -8,7 +8,7 @@ class ApiClient extends GenericAPIClient  {
     return resp.json();
   }
 
-  constructor(myVeryImportantSetting) {
+  constructor() {
     super(
       'http://localhost:8081/',
       {
@@ -19,8 +19,6 @@ class ApiClient extends GenericAPIClient  {
         }
       }
     );
-    // Set a custom variable to the instace
-    this.myVeryImportantSetting = myVeryImportantSetting;
   }
 
   getImportantThingsList() {
