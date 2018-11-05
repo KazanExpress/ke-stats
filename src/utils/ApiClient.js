@@ -10,7 +10,7 @@ class ApiClient extends GenericAPIClient  {
 
   constructor() {
     super(
-      'http://localhost:8081/',
+      'http://localhost:8081/api',
       {
         headers: {
           'Authorization': 'Basic a2F6YW5leHByZXNzLWN1c3RvbWVyOmN1c3RvbWVyU2VjcmV0S2V5',
@@ -22,11 +22,11 @@ class ApiClient extends GenericAPIClient  {
   }
 
   getImportantThingsList() {
-    return this.get(withQuery('/api/main/', {}));
+    return this.get(withQuery('/main/', {}));
   }
 
   getAccessToken(login, password) {
-    return this.post(withQuery('/api/oauth/token', {
+    return this.post(withQuery('/oauth/token', {
       'grant_type': 'password',
       'username': login,
       'password': password
