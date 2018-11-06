@@ -1,21 +1,19 @@
 <template>
-  <el-main class="side-panel-main">
-    <div>
-      <el-menu :default-active="$route.path.substr(1)"
-               class="menu-item"
-               background-color="#373737"
-               text-color="hsla(0,0%,100%,.6)"
-               active-text-color="#fff"
-               :router="true">
-        <el-menu-item v-for="menuItem in menu"
-                      :index="menuItem.url"
-                      v-show="!menuItem.hidden"
-                      :key="menuItem.url">
-          <span>{{routerTitle(menuItem.url)}}</span>
-        </el-menu-item>
-      </el-menu>
-    </div>
-  </el-main>
+  <nav class="side-panel-main">
+    <el-menu :default-active="$route.path.substr(1)"
+             class="menu-item"
+             background-color="#373737"
+             text-color="hsla(0,0%,100%,.6)"
+             active-text-color="#fff"
+             :router="true">
+      <el-menu-item v-for="menuItem in menu"
+                    :index="menuItem.url"
+                    v-show="!menuItem.hidden"
+                    :key="menuItem.url">
+        <span>{{routerTitle(menuItem.url)}}</span>
+      </el-menu-item>
+    </el-menu>
+  </nav>
 </template>
 
 <script>
@@ -55,6 +53,7 @@
   }
 
   .side-panel-main {
+    height: 100%;
     padding: 20px 0;
   }
 </style>
