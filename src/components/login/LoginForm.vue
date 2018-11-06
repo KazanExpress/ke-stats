@@ -16,7 +16,8 @@
 </template>
 
 <script>
-  import api from "@/utils/ApiClient.js"
+  import ApiClient from "@/utils/ApiClient.js"
+  import UserUtils from "@/utils/UserUtils";
 
   export default {
     name: "LoginForm",
@@ -32,7 +33,8 @@
         }
       };
       return {
-        apiClient: new api.ApiClient(),
+        apiClient: new ApiClient(),
+        userUtils: null,
         backendError: false,
         form: {
           pass: '',
@@ -52,49 +54,22 @@
     mounted() {
       this.form.username = this.$store.getters.username;
     },
+    created() {
+      this.userUtils =  new UserUtils(this.$store);
+    },
     methods: {
       warnMessage() {
         this.backendError = true;
         this.$refs['form'].validate('pass');
         this.form.passError = 'Credentials are not valid';
       },
-      claimAccessToken() {
-        // let _this = this;
-        this.$store.commit('loading', true);
-        this.apiClient.getAccessToken(this.form.username, this.form.pass)
-          .then(res => {
-            console.log(res.status);
-            console.log(res.data);
-            if (res.error) {
-              this.$store.commit('clearCredentials');
-              this.warnMessage();
-            } else {
-              this.$store.commit('saveCredentials', {
-                username: this.form.username,
-                access_token: res.data.access_token
-              });
-              this.claimUserInfo();
-              this.$router.push('/')
-            }
-            this.$store.commit('loading', false);
-          })
-          .catch(() => {
-            this.$store.commit('clearCredentials');
-            this.warnMessage();
-            this.$store.commit('loading', false);
-          });
-      },
-      saveUserInfo: function (firstName) {
-        this.$store.commit('firstName', firstName);
-      },
-      claimUserInfo() {
-        // this.apiClient.getUserInfo().then(res => {
-        //   if (res.error) {
-        //     console.log(res.errorMessage)
-        //   } else {
-        //     this.saveUserInfo(res.data.first_name);
-        //   }
-        // })
+      async claimAccessToken() {
+        try {
+          await this.userUtils.claimCredentials(this.form.username, this.form.pass);
+          this.$router.push('/');
+        } catch (e) {
+          this.warnMessage();
+        }
       },
       submitForm(formName) {
         this.backendError = false;

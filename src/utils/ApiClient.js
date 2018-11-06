@@ -1,6 +1,6 @@
 import {GenericAPIClient, withQuery} from 'kefetchup/dist/kefetchup.es5'
 
-class ApiClient extends GenericAPIClient {
+export default class ApiClient extends GenericAPIClient {
   async responseHandler(resp) {
     let wrapper = {status: resp.status};
     if (resp.status >= 400) {
@@ -36,8 +36,4 @@ class ApiClient extends GenericAPIClient {
   getUserInfo() {
     // return this.get('/api/');
   }
-}
-
-export default {
-  ApiClient
 }
