@@ -11,6 +11,10 @@ export default new Router({
     {
       path: '/',
       name: 'home',
+      meta: {
+        title: 'Home',
+        authRequired: true
+      },
       component: Home
     },
     {
@@ -24,21 +28,38 @@ export default new Router({
     {
       path: '/chart3',
       name: 'chart3',
+      meta: {
+        title: 'Chart Three',
+        authRequired: true
+      },
       component: () => import('./views/Chart3.vue')
     },
     {
       path: '/chart2',
       name: 'chart2',
+      meta: {
+        title: 'Chart Two',
+        authRequired: true
+      },
       component: () => import('./views/Chart2.vue')
     },
     {
       path: '/chart1',
       name: 'chart1',
+      meta: {
+        title: 'Chart One',
+        authRequired: true
+      },
       component: () => import('./views/Chart1.vue')
     },
     {
       path: '/login',
       name: 'login',
+      meta: {
+        title: 'Chart One',
+        authRequired: false,
+        hideNav: true
+      },
       component: () => import('./views/Login.vue')
     }
   ]

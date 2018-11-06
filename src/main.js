@@ -10,15 +10,15 @@ Vue.use(ElementUI);
 Vue.config.productionTip = false;
 
 router.beforeEach((to, from, next) => {
-  if (to.path !== '/login' && !store.getters.access_token) {
+  if (to.meta.authRequired && !store.getters.access_token) {
     console.log("You need to authorize");
     return next("/login");
   }
-  if (to.path === '/login' && !!store.getters.access_token) {
+  if (!to.meta.authRequired && !!store.getters.access_token) {
     console.log("You do not need to authorize");
     return next("/");
   }
-  if (to.path === '/login') {
+  if (to.meta.hideNav) {
     store.commit('hideAside');
     store.commit('hideHeader');
   } else {

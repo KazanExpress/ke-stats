@@ -2,7 +2,9 @@
   <div id="app">
     <el-container style="height: 100vh" v-loading="$store.getters.loading">
       <el-container>
-        <el-header v-show="$store.state.headerVisible" class="el-main-header">Header</el-header>
+        <el-header v-show="$store.state.headerVisible" class="el-main-header">
+          {{$route.meta.title}}
+        </el-header>
         <el-main class="el-main-main">
           <router-view/>
         </el-main>

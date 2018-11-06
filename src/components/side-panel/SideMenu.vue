@@ -7,17 +7,11 @@
                text-color="hsla(0,0%,100%,.6)"
                active-text-color="#fff"
                :router="true">
-        <el-menu-item v-show="false" index="">
-          <span>Home</span>
-        </el-menu-item>
-        <el-menu-item index="chart1">
-          <span>Chart One</span>
-        </el-menu-item>
-        <el-menu-item index="chart2">
-          <span>Chart Two</span>
-        </el-menu-item>
-        <el-menu-item index="chart3">
-          <span>Chart Three</span>
+        <el-menu-item v-for="menuItem in menu"
+                      :index="menuItem.url"
+                      v-show="!menuItem.hidden"
+                      :key="menuItem.url">
+          <span>{{routerTitle(menuItem.url)}}</span>
         </el-menu-item>
       </el-menu>
     </div>
@@ -26,7 +20,28 @@
 
 <script>
   export default {
-    name: "SideMenu"
+    name: "SideMenu",
+    data() {
+      return {
+        menu: [
+          {
+            url: '',
+            hidden: true
+          }, {
+            url: 'chart1',
+          }, {
+            url: 'chart2',
+          }, {
+            url: 'chart3',
+          },
+        ],
+      }
+    },
+    methods: {
+      routerTitle(url) {
+        return this.$router.resolve('/' + url).route.meta.title;
+      }
+    }
   }
 </script>
 
