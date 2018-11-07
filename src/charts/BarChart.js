@@ -45,11 +45,17 @@ export default {
   methods: {
   },
   mounted() {
-    this.renderChart({datasets: [this.dataset]}, this.options);
+    setTimeout(() => {
+      this.renderChart({datasets: [this.dataset]}, this.options);
+      this.$emit('loadingState', false);
+    }, 0);
   },
   watch: {
     timeUnit() {
-      this.renderChart({datasets: [this.dataset]}, this.options);
+      setTimeout(() => {
+        this.renderChart({datasets: [this.dataset]}, this.options);
+        this.$emit('loadingState', false);
+      }, 0)
     }
   }
 }

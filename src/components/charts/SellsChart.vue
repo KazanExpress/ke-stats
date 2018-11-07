@@ -51,7 +51,6 @@
         return res;
       },
       processChartData() {
-        this.loadingState(true);
         if (this.parsedData.length === 0) {
           this.parsedData = this.parseData(this.$store.state.ordersData);
         }
@@ -61,13 +60,12 @@
 
         data.forEach(item => item.t = moment(item.t).startOf(this.timeUnit));
         this.dataset.data = data;
-        this.loadingState(false);
       },
     },
     mounted() {
       setTimeout(() => {
         this.processChartData();
-      }, 0);
+      }, 100);
     },
     watch: {
       timeUnit() {

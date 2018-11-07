@@ -34,7 +34,6 @@
     },
     methods: {
       async loadAndSaveOrdersData() {
-        this.dataLoading = true;
         try {
           let res = await this.dataApiClient.getData();
           console.log(res.status);
@@ -46,13 +45,13 @@
         } catch (e) {
           console.log('Data can not be loaded')
         }
-        this.dataLoading = false;
       },
       loadingState(state) {
-        this.dataLoading = state;
+        this.dataLoading = !!state;
       }
     },
     mounted() {
+      this.loadingState(true);
       if (this.$store.state.ordersData.length === 0) {
         this.loadAndSaveOrdersData();
       }
