@@ -1,7 +1,7 @@
 <template>
-  <bar-chart :title="title"
+  <bar-chart class="bar-chart"
+             :title="title"
              :timeUnit="timeUnit"
-             class="bar-chart"
              v-on:loadingState='loadingState'
              v-if="dataset.data.length > 0"
              :dataset="dataset">
@@ -63,8 +63,10 @@
       },
     },
     mounted() {
+      this.loadingState(true);
       setTimeout(() => {
         this.processChartData();
+        this.loadingState(false);
       }, 100);
     },
     watch: {

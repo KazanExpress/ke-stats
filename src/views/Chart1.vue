@@ -17,47 +17,19 @@
 </template>
 
 <script>
+  import DefaultSellsView from './DefaultSellsView.js'
   import SellsChart from '@/components/charts/SellsChart.vue'
-  import DataApiClient from '@/utils/DataApiClient.js'
 
   export default {
+    extends: DefaultSellsView,
     components: {
       SellsChart
     },
     data() {
       return {
         title: this.$route.meta.title,
-        timeUnit: 'quarter',
-        dataApiClient: null,
-        dataLoading: false
+        timeUnit: 'quarter'
       }
-    },
-    methods: {
-      async loadAndSaveOrdersData() {
-        try {
-          let res = await this.dataApiClient.getData();
-          console.log(res.status);
-          console.log(res.data);
-          if (res.error) {
-            throw new Error();
-          }
-          this.$store.commit('ordersData', res.data);
-        } catch (e) {
-          console.log('Data can not be loaded')
-        }
-      },
-      loadingState(state) {
-        this.dataLoading = !!state;
-      }
-    },
-    mounted() {
-      this.loadingState(true);
-      if (this.$store.state.ordersData.length === 0) {
-        this.loadAndSaveOrdersData();
-      }
-    },
-    created() {
-      this.dataApiClient = new DataApiClient();
     }
   }
 </script>
