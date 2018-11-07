@@ -1,10 +1,8 @@
 <template>
   <section class="card-container" v-loading="dataLoading">
-    <el-card shadow="always" class="sells-list-container">
-      <sells-list v-if="$store.state.ordersData.length > 0"
-                   v-on:loadingState="loadingState">
-      </sells-list>
-    </el-card>
+    <sells-list v-if="$store.state.ordersData.length > 0"
+                v-on:loadingState="loadingState">
+    </sells-list>
   </section>
 </template>
 
@@ -16,7 +14,7 @@
     extends: DefaultSellsView,
     components: {
       SellsList
-    }
+    },
   }
 </script>
 

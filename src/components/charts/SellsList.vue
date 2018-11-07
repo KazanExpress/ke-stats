@@ -1,35 +1,47 @@
 <template>
-  <el-table :data="pagedData"
-            style="width: 100%"
-            @sort-change="changedSorting"
-            @filter-change="changedStatusFilter">
-    <el-table-column
-        prop="id"
-        label="Id"
-        sortable
-        width="100">
-    </el-table-column>
-    <el-table-column
-        prop="status"
-        :filters="[{text: 'COMPLETED', value: 'COMPLETED'}, {text: 'ACTIVE', value: 'ACTIVE'}]"
-        :filter-method="() => {return true;}"
-        column-key="status"
-        label="Status">
-    </el-table-column>
-    <el-table-column
-        prop="date_created"
-        label="Date"
-        column-key="date_created"
-        sortable
-        :formatter="dateFormatter">
-    </el-table-column>
-    <el-table-column
-        prop="price"
-        label="Price"
-        sortable
-        width="130">
-    </el-table-column>
-  </el-table>
+  <el-card shadow="always" class="sells-list-container">
+    <el-table :data="pagedData"
+              style="width: 100%"
+              @sort-change="changedSorting"
+              @filter-change="changedStatusFilter">
+      <el-table-column
+          prop="id"
+          label="Id"
+          sortable
+          width="100">
+      </el-table-column>
+      <el-table-column
+          prop="status"
+          :filters="statuses"
+          :filter-method="() => {return true;}"
+          column-key="status"
+          label="Status">
+      </el-table-column>
+      <el-table-column
+          prop="date_created"
+          label="Date"
+          column-key="date_created"
+          sortable
+          :formatter="dateFormatter">
+      </el-table-column>
+      <el-table-column
+          prop="price"
+          label="Price"
+          sortable
+          width="130">
+      </el-table-column>
+    </el-table>
+    <el-pagination
+        style="margin: 1rem 0 0 0"
+        layout="sizes, prev, pager, next"
+        :current-page.sync="page"
+        @size-change="handleSizeChange"
+        :page-size="pageSize"
+        :page-sizes="[8, 15, 50, 100]"
+        :pager-count="11"
+        :total="unpagedData.length">
+    </el-pagination>
+  </el-card>
 </template>
 
 <script>
@@ -37,24 +49,25 @@
 
   export default {
     name: "SellsList",
-    props: {
-      page: {
-        type: Number,
-        default: 0
-      },
-      size: {
-        type: Number,
-        default: 15
-      }
-    },
     data() {
       return {
+        statuses: [],
         filters: {},
         filtersChanged: true,
-        sort: undefined
+        sort: undefined,
+        page: 1,
+        pageSize: 15
       }
     },
     methods: {
+      parseStatuses(data) {
+        data.forEach(item => {
+          if (this.statuses.find(i => i.value === item.status)) {
+            return;
+          }
+          this.statuses.push({text: item.status, value: item.status});
+        })
+      },
       dateFormatter(row, column, value) {
         return moment(value).format('L LTS');
       },
@@ -97,15 +110,24 @@
           res = res && statuses.includes(item.status);
           return res;
         });
+      },
+      handleSizeChange(value) {
+        this.pageSize = value;
       }
     },
     computed: {
-      pagedData() {
+      unpagedData() {
+        this.parseStatuses(this.$store.state.ordersData);
         let filtered = this.applyFilters(this.$store.state.ordersData, this.filters);
         let sorted = this.applySorts(filtered, this.sort);
         const dummy = this.filtersChanged;
-        return sorted.slice(this.page * this.size, this.size);
-        // return this.$store.state.ordersData;
+        return sorted;
+      },
+      pagedData() {
+        return this.unpagedData.slice(this.offset, this.pageSize + this.offset);
+      },
+      offset() {
+        return (this.page - 1) * this.pageSize;
       }
     },
   }
