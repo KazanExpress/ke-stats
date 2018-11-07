@@ -1,9 +1,17 @@
 <template>
-  <bar-chart :title="title" :timeUnit="timeUnit" class="bar-chart" v-on:loading='loadingState'></bar-chart>
+  <bar-chart :title="title"
+             :timeUnit="timeUnit"
+             class="bar-chart"
+             v-on:loadingState='loadingState'
+             v-if="dataset.data.length > 0"
+             :dataset="dataset">
+  </bar-chart>
 </template>
 
 <script>
   import BarChart from '@/charts/BarChart.js'
+  import {CommonUtils} from '@/utils/CommonUtils.js'
+  import moment from 'moment'
 
   export default {
     name: 'SellsChart',
@@ -17,9 +25,53 @@
         default: 'month'
       }
     },
+    data() {
+      const dataset = {
+        label: 'Total price for orders',
+        fill: false,
+        borderColor: '#ff0000',
+        backgroundColor: '#ffffff',
+        data: []
+      };
+      return {
+        dataset,
+        parsedData: []
+      }
+    },
     methods: {
       loadingState(state) {
-        this.$emit('loading', state);
+        this.$emit('loadingState', state);
+      },
+      parseData(ordersData) {
+        let res = ordersData.map(order => ({
+          t: moment(order.date_created).valueOf(),
+          y: order.price
+        }));
+        res.sort((a, b) => a.t - b.t);
+        return res;
+      },
+      processChartData() {
+        this.loadingState(true);
+        if (this.parsedData.length === 0) {
+          this.parsedData = this.parseData(this.$store.state.ordersData);
+        }
+        let data = CommonUtils.groupBy(this.parsedData,
+          (a, b) => moment(a.t).isSame(b.t, this.timeUnit),
+          (a, b) => ({t: a.t, y: a.y + b.y}));
+
+        data.forEach(item => item.t = moment(item.t).startOf(this.timeUnit));
+        this.dataset.data = data;
+        this.loadingState(false);
+      },
+    },
+    mounted() {
+      setTimeout(() => {
+        this.processChartData();
+      }, 0);
+    },
+    watch: {
+      timeUnit() {
+        this.processChartData();
       }
     }
   }

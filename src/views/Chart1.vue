@@ -3,7 +3,8 @@
     <el-card shadow="always" class="chart-container">
       <sells-chart v-if="$store.state.ordersData.length > 0"
                    :title="title"
-                   :timeUnit="timeUnit" v-on:loading="loadingState">
+                   :timeUnit="timeUnit"
+                   v-on:loadingState="loadingState">
       </sells-chart>
       <el-radio-group v-model="timeUnit" class="time-unit-selector">
         <el-radio-button label="quarter"></el-radio-button>
@@ -33,7 +34,6 @@
     },
     methods: {
       async loadAndSaveOrdersData() {
-        console.log('Start loading');
         this.dataLoading = true;
         try {
           let res = await this.dataApiClient.getData();
