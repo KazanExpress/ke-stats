@@ -9,12 +9,12 @@ export default {
     timeUnit: {
       type: String,
       default: 'month'
-    }
+    },
+    loading: Boolean
   },
   data() {
-    console.log(this.timeUnit);
     const dataset = {
-      label: 'GitHub Commits',
+      label: 'Total price for orders',
       fill: false,
       borderColor: '#ff0000',
       backgroundColor: '#ffffff',
@@ -27,7 +27,7 @@ export default {
           type: 'time',
           time: {
             unit: this.timeUnit,
-            max: 1541005665000
+            // max: 1541005665000
           },
           distribution: 'series'
         }],
@@ -43,18 +43,26 @@ export default {
     };
     return {
       dataset,
-      options
+      options,
+      parsedData: []
     }
   },
   methods: {
-    reRender() {
-      let data = [];
-      let time = 1540005665000;
-      for (let i = 0; i < 1000; i++) {
-        data.push({t: time, y: Math.sin(time / 10000000000) * 100});
-        time += Math.random() * 100000000;
+    parseData(ordersData) {
+      console.log('Parse data');
+      ordersData.sort((b, a) => moment(b.date_created).valueOf() - moment(a.date_created).valueOf());
+      return ordersData.map(order => ({
+        t: moment(order.date_created).valueOf(),
+        y: order.price
+      }));
+    },
+    async reRender() {
+      console.log('re-render data');
+      this.$emit('loading', true);
+      if (this.parsedData.length === 0) {
+        this.parsedData = this.parseData(this.$store.state.ordersData);
       }
-      data = CommonUtils.groupBy(data,
+      let data = CommonUtils.groupBy(this.parsedData,
         (a, b) => moment(a.t).isSame(b.t, this.timeUnit),
         (a, b) => ({t: a.t, y: a.y + b.y}));
 
@@ -62,16 +70,23 @@ export default {
       this.dataset.data = data;
       this.renderChart({
         datasets: [this.dataset]
-      }, this.options)
+      }, this.options);
+      this.$emit('loading', false);
     }
   },
   mounted() {
+    console.log('Mounted');
     this.reRender();
+    console.log('After Mounted');
   },
   watch: {
     timeUnit() {
+      console.log('Watch');
       this.reRender();
+      console.log('After Watch');
     }
   }
 }
+
+
 

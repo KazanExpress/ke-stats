@@ -10,7 +10,8 @@ export default new Vuex.Store({
     basic_token: '',
     loading: false,
     headerVisible: true,
-    asideVisible: true
+    asideVisible: true,
+    ordersData: []
   },
   mutations: {
     username (state, value) {
@@ -37,6 +38,9 @@ export default new Vuex.Store({
       console.log(creds.username, creds.access_token);
       this.commit('username', creds.username);
       this.commit('access_token', creds.access_token);
+    },
+    ordersData(state, value){
+      state.ordersData = value;
     },
     loading (state, value) {
       state.loading = value;

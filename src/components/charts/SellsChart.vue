@@ -1,5 +1,5 @@
 <template>
-  <bar-chart :title="title" :timeUnit="timeUnit" class="bar-chart"></bar-chart>
+  <bar-chart :title="title" :timeUnit="timeUnit" class="bar-chart" v-on:loading='loadingState'></bar-chart>
 </template>
 
 <script>
@@ -15,6 +15,11 @@
       timeUnit: {
         type: String,
         default: 'month'
+      }
+    },
+    methods: {
+      loadingState(state) {
+        this.$emit('loading', state);
       }
     }
   }

@@ -1,7 +1,10 @@
 <template>
-  <section class="card-container">
+  <section class="card-container" v-loading="dataLoading">
     <el-card shadow="always" class="chart-container">
-      <sells-chart :title="title" :timeUnit="timeUnit"></sells-chart>
+      <sells-chart v-if="$store.state.ordersData.length > 0"
+                   :title="title"
+                   :timeUnit="timeUnit" v-on:loading="loadingState">
+      </sells-chart>
       <el-radio-group v-model="timeUnit" class="time-unit-selector">
         <el-radio-button label="quarter"></el-radio-button>
         <el-radio-button label="month"></el-radio-button>
@@ -14,6 +17,7 @@
 
 <script>
   import SellsChart from '@/components/charts/SellsChart.vue'
+  import DataApiClient from '@/utils/DataApiClient.js'
 
   export default {
     components: {
@@ -22,8 +26,39 @@
     data() {
       return {
         title: this.$route.meta.title,
-        timeUnit: 'quarter'
+        timeUnit: 'quarter',
+        dataApiClient: null,
+        dataLoading: false
       }
+    },
+    methods: {
+      async loadAndSaveOrdersData() {
+        console.log('Start loading');
+        this.dataLoading = true;
+        try {
+          let res = await this.dataApiClient.getData();
+          console.log(res.status);
+          console.log(res.data);
+          if (res.error) {
+            throw new Error();
+          }
+          this.$store.commit('ordersData', res.data);
+        } catch (e) {
+          console.log('Data can not be loaded')
+        }
+        this.dataLoading = false;
+      },
+      loadingState(state) {
+        this.dataLoading = state;
+      }
+    },
+    mounted() {
+      if (this.$store.state.ordersData.length === 0) {
+        this.loadAndSaveOrdersData();
+      }
+    },
+    created() {
+      this.dataApiClient = new DataApiClient();
     }
   }
 </script>
