@@ -1,6 +1,5 @@
 <template>
   <section class="card-container" v-loading="dataLoading">
-    <h1>Chart #2</h1>
     <el-card shadow="always" class="sells-list-container">
       <sells-list v-if="$store.state.ordersData.length > 0"
                    v-on:loadingState="loadingState">

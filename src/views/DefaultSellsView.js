@@ -1,4 +1,5 @@
 import DataApiClient from '@/utils/DataApiClient.js'
+import moment from "moment";
 
 export default {
   name: "DefaultSellsView",
@@ -18,6 +19,11 @@ export default {
         if (res.error) {
           throw new Error();
         }
+        res.data.sort((b, a) => a.id - b.id);
+        res.data.map(item => {
+          item.date_created = moment(item.date_created).valueOf();
+          return item;
+        });
         this.$store.commit('ordersData', res.data);
       } catch (e) {
         console.log('Data can not be loaded')
