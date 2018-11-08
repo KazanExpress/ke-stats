@@ -2,6 +2,7 @@
   <bar-chart class="bar-chart"
              :title="title"
              :timeUnit="timeUnit"
+             :forceRerender="reRender"
              v-on:loadingState='loadingState'
              v-if="dataset.data.length > 0"
              :dataset="dataset">
@@ -23,6 +24,17 @@
       timeUnit: {
         type: String,
         default: 'month'
+      },
+      converter: {
+        type: Function,
+        default: order => ({
+          t: moment(order.date_created).valueOf(),
+          y: order.price
+        })
+      },
+      aggregator: {
+        type: Function,
+        default: (a, b) => ({t: a.t, y: a.y + b.y})
       }
     },
     data() {
@@ -35,7 +47,8 @@
       };
       return {
         dataset,
-        parsedData: []
+        parsedData: [],
+        reRender: {}
       }
     },
     methods: {
@@ -43,10 +56,7 @@
         this.$emit('loadingState', state);
       },
       parseData(ordersData) {
-        let res = ordersData.map(order => ({
-          t: moment(order.date_created).valueOf(),
-          y: order.price
-        }));
+        let res = ordersData.map(this.converter);
         res.sort((a, b) => a.t - b.t);
         return res;
       },
@@ -56,7 +66,7 @@
         }
         let data = CommonUtils.groupBy(this.parsedData,
           (a, b) => moment(a.t).isSame(b.t, this.timeUnit),
-          (a, b) => ({t: a.t, y: a.y + b.y}));
+          this.aggregator);
 
         data.forEach(item => item.t = moment(item.t).startOf(this.timeUnit));
         this.dataset.data = data;
@@ -72,6 +82,11 @@
     watch: {
       timeUnit() {
         this.processChartData();
+      },
+      converter() {
+        this.parsedData = [];
+        this.processChartData();
+        this.reRender = {};
       }
     }
   }

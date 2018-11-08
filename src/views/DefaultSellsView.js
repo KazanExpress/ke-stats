@@ -41,6 +41,6 @@ export default {
     }
   },
   created() {
-    this.dataApiClient = new DataApiClient();
+    this.dataApiClient = new DataApiClient(this.$store.getters.access_token);
   }
 }

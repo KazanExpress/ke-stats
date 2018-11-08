@@ -1,11 +1,35 @@
-import ApiClient from "./ApiClient";
+// import ApiClient from "./ApiClient";
+import DataApiClient from "./DataApiClient";
 
 export default class UserUtils {
   $store;
 
   constructor(store) {
     this.$store = store;
-    this.apiClient = new ApiClient();
+    // this.apiClient = new ApiClient();
+  }
+
+  async checkCredentials(username, password) {
+    let token = btoa(username + ':' + password);
+    this.$store.commit('loading', true);
+    console.log(token);
+    let dataApiClient = new DataApiClient(token);
+    try {
+      let res = await dataApiClient.checkToken();
+      if (res.error) {
+        throw new Error();
+      } else {
+        this.$store.commit('saveCredentials', {
+          username,
+          access_token: token
+        });
+        this.$store.commit('loading', false);
+      }
+    } catch (e) {
+      this.$store.commit('clearCredentials');
+      this.$store.commit('loading', false);
+      throw new Error();
+    }
   }
 
   async claimCredentials(username, password) {

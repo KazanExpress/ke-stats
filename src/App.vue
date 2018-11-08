@@ -3,7 +3,7 @@
     <el-container style="height: 100vh" v-loading="$store.getters.loading">
       <el-container>
         <el-header v-show="$store.state.headerVisible" class="el-main-header">
-          {{$route.meta.title}}
+          <h1>{{$route.meta.title}}</h1>
         </el-header>
         <el-main class="el-main-main">
           <router-view/>

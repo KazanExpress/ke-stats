@@ -29,9 +29,7 @@
             url: 'chart1',
           }, {
             url: 'chart2',
-          }, {
-            url: 'chart3',
-          },
+          }
         ],
       }
     },

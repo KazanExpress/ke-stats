@@ -26,7 +26,7 @@
       let validatePass = (rule, value, callback) => {
         if (_this.backendError) {
           callback(new Error('Credentials are not valid'))
-        } else if (value === undefined || value.length < 8) {
+        } else if (value === undefined || value.length < 4) {
           callback(new Error('Please input the password'));
         } else {
           callback();
@@ -65,7 +65,7 @@
       },
       async claimAccessToken() {
         try {
-          await this.userUtils.claimCredentials(this.form.username, this.form.pass);
+          await this.userUtils.checkCredentials(this.form.username, this.form.pass);
           this.$router.push('/');
         } catch (e) {
           this.warnMessage();

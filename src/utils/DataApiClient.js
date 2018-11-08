@@ -11,15 +11,19 @@ export default class DataApiClient extends GenericAPIClient {
     return wrapper;
   }
 
-  constructor() {
+  constructor(token) {
     super(
       'http://localhost:3000/',
       {
         headers: {
-          'Authorization': 'Basic YWRtaW46YWRtaW4='
+          'Authorization': 'Basic ' + token
         }
       }
     );
+  }
+
+  checkToken() {
+    return this.get('/graph-info');
   }
 
   getData() {

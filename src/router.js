@@ -26,19 +26,10 @@ export default new Router({
       component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
     },
     {
-      path: '/chart3',
-      name: 'chart3',
-      meta: {
-        title: 'Chart Three',
-        authRequired: true
-      },
-      component: () => import('./views/Chart3.vue')
-    },
-    {
       path: '/chart2',
       name: 'chart2',
       meta: {
-        title: 'Chart Two',
+        title: 'Sells List',
         authRequired: true
       },
       component: () => import('./views/Chart2.vue')
@@ -47,7 +38,7 @@ export default new Router({
       path: '/chart1',
       name: 'chart1',
       meta: {
-        title: 'Chart One',
+        title: 'Sells Chart',
         authRequired: true
       },
       component: () => import('./views/Chart1.vue')
