@@ -1,8 +1,8 @@
 <template>
   <bar-chart class="bar-chart"
+             ref="chart"
              :title="title"
              :timeUnit="timeUnit"
-             :forceRerender="reRender"
              v-on:loadingState='loadingState'
              v-if="dataset.data.length > 0"
              :dataset="dataset">
@@ -47,8 +47,7 @@
       };
       return {
         dataset,
-        parsedData: [],
-        reRender: {}
+        parsedData: []
       }
     },
     methods: {
@@ -86,7 +85,7 @@
       converter() {
         this.parsedData = [];
         this.processChartData();
-        this.reRender = {};
+        this.$refs.chart.forceRerender();
       }
     }
   }

@@ -4,7 +4,6 @@ export default {
   extends: Line,
   props: {
     title: String,
-    forceRerender: Object,
     timeUnit: {
       type: String,
       default: 'month'
@@ -44,6 +43,12 @@ export default {
     }
   },
   methods: {
+    forceRerender() {
+      setTimeout(() => {
+        this.renderChart({datasets: [this.dataset]}, this.options);
+        this.$emit('loadingState', false);
+      }, 0)
+    }
   },
   mounted() {
     setTimeout(() => {
@@ -53,12 +58,6 @@ export default {
   },
   watch: {
     timeUnit() {
-      setTimeout(() => {
-        this.renderChart({datasets: [this.dataset]}, this.options);
-        this.$emit('loadingState', false);
-      }, 0)
-    },
-    forceRerender() {
       setTimeout(() => {
         this.renderChart({datasets: [this.dataset]}, this.options);
         this.$emit('loadingState', false);
