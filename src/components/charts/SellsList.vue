@@ -26,7 +26,7 @@
       </el-table-column>
       <el-table-column
           prop="price"
-          label="Price"
+          label="Price(RUB)"
           sortable
           width="130">
       </el-table-column>
