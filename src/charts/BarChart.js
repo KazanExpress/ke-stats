@@ -9,7 +9,7 @@ export default {
       default: 'month'
     },
     loading: Boolean,
-    dataset: Object
+    datasets: Array
   },
   data() {
     const defOptions = {
@@ -45,23 +45,17 @@ export default {
   methods: {
     forceRerender() {
       setTimeout(() => {
-        this.renderChart({datasets: [this.dataset]}, this.options);
+        this.renderChart({datasets: this.datasets}, this.options);
         this.$emit('loadingState', false);
       }, 0)
     }
   },
   mounted() {
-    setTimeout(() => {
-      this.renderChart({datasets: [this.dataset]}, this.options);
-      this.$emit('loadingState', false);
-    }, 0);
+    this.forceRerender();
   },
   watch: {
     timeUnit() {
-      setTimeout(() => {
-        this.renderChart({datasets: [this.dataset]}, this.options);
-        this.$emit('loadingState', false);
-      }, 0)
+      this.forceRerender();
     }
   }
 }

@@ -5,7 +5,7 @@
              :timeUnit="timeUnit"
              v-on:loadingState='loadingState'
              v-if="dataset.data.length > 0"
-             :dataset="dataset">
+             :datasets="[dataset]">
   </bar-chart>
 </template>
 
@@ -25,6 +25,8 @@
         type: String,
         default: 'month'
       },
+      maxTime: Number,
+      minTime: Number,
       converter: {
         type: Function,
         default: order => ({
@@ -56,6 +58,9 @@
       },
       parseData(ordersData) {
         let res = ordersData.map(this.converter);
+        if (this.minTime && this.maxTime) {
+          res = res.filter(o => o.t >= this.minTime && o.t <= this.maxTime);
+        }
         res.sort((a, b) => a.t - b.t);
         return res;
       },
@@ -70,6 +75,11 @@
         data.forEach(item => item.t = moment(item.t).startOf(this.timeUnit));
         this.dataset.data = data;
       },
+      forceRerender() {
+        this.parsedData = [];
+        this.processChartData();
+        this.$refs.chart.forceRerender();
+      }
     },
     mounted() {
       this.loadingState(true);
@@ -82,10 +92,14 @@
       timeUnit() {
         this.processChartData();
       },
+      minTime() {
+        this.forceRerender();
+      },
+      maxTime() {
+        this.forceRerender();
+      },
       converter() {
-        this.parsedData = [];
-        this.processChartData();
-        this.$refs.chart.forceRerender();
+        this.forceRerender();
       }
     }
   }
