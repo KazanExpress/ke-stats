@@ -1,7 +1,10 @@
 <template>
   <section class="card-container" v-loading="dataLoading">
     <el-card shadow="always" class="chart-container">
-      <el-radio-group fill="#e53935" v-model="activatorIndex" class="time-unit-button-group">
+      <el-radio-group v-if="$store.state.ordersData.length > 0"
+                      fill="#e53935"
+                      v-model="activatorIndex"
+                      class="chart-selector-button-group">
         <el-radio-button v-for="a in activators" :key="a.label" :label="a.index">
           {{a.label}}
         </el-radio-button>
@@ -15,7 +18,7 @@
                    :minTime="minTime"
                    v-on:loadingState="loadingState">
       </sells-chart>
-      <div class="controls-container">
+      <div class="controls-container" v-if="$store.state.ordersData.length > 0">
         <el-radio-group v-model="timeUnit" class="time-unit-button-group">
           <el-radio-button class="time-unit-button"
                            v-for="unit in timeUnits"
@@ -156,16 +159,20 @@
   .chart-container {
     min-height: 300px;
   }
+
   .time-unit-button:focus:not(.is-focus):not(:active):not(.is-disabled) {
     box-shadow: none;
   }
 
   .controls-container {
-    display: inline-flex;
     padding: 2rem 0 1rem 0;
   }
 
   .time-unit-button-group {
     margin-right: 1rem;
+  }
+
+  .chart-selector-button-group {
+    margin-bottom: 1rem;
   }
 </style>

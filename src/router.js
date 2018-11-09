@@ -1,29 +1,21 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
+import store from "@/store";
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
     {
       path: '/',
       name: 'home',
+      redirect: '/chart1',
       meta: {
         title: 'Home',
         authRequired: true
-      },
-      component: Home
-    },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
+      }
     },
     {
       path: '/chart2',
@@ -52,6 +44,38 @@ export default new Router({
         hideNav: true
       },
       component: () => import('./views/Login.vue')
+    },
+    {
+      path: '/error',
+      alias: '*',
+      name: 'error',
+      component: () => import('./views/Error.vue'),
+      props: true,
+      meta: {
+        title: 'Error',
+        authRequired: false
+      }
     }
   ]
-})
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.authRequired && !store.getters.access_token) {
+    console.log("You need to authorize");
+    return next("/login");
+  }
+  if (to.path === '/login' && !!store.getters.access_token) {
+    console.log("You do not need to authorize");
+    return next("/");
+  }
+  if (to.meta.hideNav) {
+    store.commit('hideAside');
+    store.commit('hideHeader');
+  } else {
+    store.commit('showAside');
+    store.commit('showHeader');
+  }
+  return next();
+});
+
+export default router;

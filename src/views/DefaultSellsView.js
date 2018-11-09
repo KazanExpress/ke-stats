@@ -26,7 +26,8 @@ export default {
         });
         this.$store.commit('ordersData', res.data);
       } catch (e) {
-        console.log('Data can not be loaded')
+        console.log('Data can not be loaded');
+        this.$router.push({name: 'error', params: {message: 'Error during data loading'}});
       }
       this.loadingState(false);
     },

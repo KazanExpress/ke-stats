@@ -21,5 +21,6 @@
 <style scoped>
   .card-container {
     margin: 1rem 4rem;
+    min-height: 300px;
   }
 </style>
