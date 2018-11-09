@@ -20,7 +20,10 @@
       BarChart
     },
     props: {
-      title: String,
+      title: {
+        type: String,
+        default: 'Total price for orders'
+      },
       timeUnit: {
         type: String,
         default: 'month'
@@ -41,7 +44,7 @@
     },
     data() {
       const dataset = {
-        label: 'Total price for orders',
+        label: '',
         fill: false,
         borderColor: '#ff0000',
         backgroundColor: '#ffffff',
@@ -73,6 +76,7 @@
           this.aggregator);
 
         data.forEach(item => item.t = moment(item.t).startOf(this.timeUnit));
+        this.dataset.label = this.title;
         this.dataset.data = data;
       },
       forceRerender() {

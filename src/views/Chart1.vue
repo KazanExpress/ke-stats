@@ -10,7 +10,7 @@
         </el-radio-button>
       </el-radio-group>
       <sells-chart v-if="$store.state.ordersData.length > 0"
-                   :title="title"
+                   :title="activator.title"
                    :timeUnit="timeUnit"
                    :converter="activator.converter"
                    :aggregator="activator.aggregator"
@@ -59,10 +59,12 @@
         activators: [
           {
             label: 'Total cost',
+            title: 'Total price for orders',
             index: 1,
           },
           {
             label: 'Total orders',
+            title: 'Total amount of orders',
             index: 2,
             converter: function (order) {
               return {
@@ -73,6 +75,7 @@
           },
           {
             label: 'Average price',
+            title: 'Avg price per order',
             index: 3,
             converter: function (order) {
               return {
