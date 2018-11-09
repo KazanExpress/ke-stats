@@ -43,7 +43,8 @@
           {
             label: 'Total cost',
             index: 1,
-          }, {
+          },
+          {
             label: 'Total orders',
             index: 2,
             converter: function (order) {
@@ -51,6 +52,24 @@
                 t: moment(order.date_created).valueOf(),
                 y: 1
               }
+            }
+          },
+          {
+            label: 'Average price',
+            index: 3,
+            converter: function (order) {
+              return {
+                t: moment(order.date_created).valueOf(),
+                y: order.price,
+                count: 1
+              }
+            },
+            aggregator: function (a, b) {
+              return {
+                t: a.t,
+                y: ((a.y * a.count) + b.y) / (a.count + 1),
+                count: a.count + 1
+              };
             }
           }
         ],
