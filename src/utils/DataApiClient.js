@@ -18,17 +18,21 @@ export default class DataApiClient extends GenericAPIClient {
       wrapper.error = true;
       wrapper.errorMessage = resp.error;
     } else {
-      wrapper.data = await resp.json();
+      try {
+        wrapper.data = await resp.json();
+      } catch(e) {
+        wrapper.data = null;
+      }
     }
     return wrapper;
   }
 
   checkToken() {
-    return this.get('/graph-info');
+    return this.get('/');
   }
 
   getDetails(id) {
-    return this.get(withQuery('/details', {id}));
+    return this.get(withQuery('/items', {id}));
   }
 
 

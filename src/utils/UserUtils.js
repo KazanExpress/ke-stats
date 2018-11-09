@@ -12,10 +12,10 @@ export default class UserUtils {
   async checkCredentials(username, password) {
     let token = btoa(username + ':' + password);
     this.$store.commit('loading', true);
-    console.log(token);
     let dataApiClient = new DataApiClient(token);
     try {
       let res = await dataApiClient.checkToken();
+      console.log(res);
       if (res.error) {
         throw new Error();
       } else {

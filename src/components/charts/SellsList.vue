@@ -4,7 +4,8 @@
               style="width: 100%"
               @sort-change="changedSorting"
               @filter-change="changedStatusFilter"
-              @expand-change="loadDetails">
+              @expand-change="loadDetails"
+              :stripe="true">
       <el-table-column type="expand">
         <template slot-scope="props">
           <order-table-details :details="details(props.row.id)"/>
@@ -12,7 +13,7 @@
       </el-table-column>
       <el-table-column
           prop="id"
-          label="Id"
+          label="Order Id"
           sortable
           width="100">
       </el-table-column>
@@ -129,11 +130,17 @@
           return;
         }
         this.detailsData = this.detailsData.filter(d => d.id !== row.id);
-        let res = await this.dataApiClient.getDetails(row.id);
+        let res;
+        try {
+          res = await this.dataApiClient.getDetails(row.id);
+        } catch (e) {
+          res = {error: true, status: e.status}
+        }
+
         if (!res.error) {
           this.detailsData.push({
             id: row.id,
-            details: 123
+            items: res.data
           });
         } else {
           this.detailsData.push({
