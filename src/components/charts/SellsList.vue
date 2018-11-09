@@ -3,7 +3,13 @@
     <el-table :data="pagedData"
               style="width: 100%"
               @sort-change="changedSorting"
-              @filter-change="changedStatusFilter">
+              @filter-change="changedStatusFilter"
+              @expand-change="loadDetails">
+      <el-table-column type="expand">
+        <template slot-scope="props">
+          <order-table-details :details="details(props.row.id)"/>
+        </template>
+      </el-table-column>
       <el-table-column
           prop="id"
           label="Id"
@@ -46,9 +52,12 @@
 
 <script>
   import moment from "moment";
+  import DataApiClient from "@/utils/DataApiClient";
+  import OrderTableDetails from "@/components/charts/OrderTableDetails";
 
   export default {
     name: "SellsList",
+    components: {OrderTableDetails},
     data() {
       return {
         statuses: [],
@@ -56,7 +65,8 @@
         filtersChanged: true,
         sort: undefined,
         page: 1,
-        pageSize: 15
+        pageSize: 15,
+        detailsData: []
       }
     },
     methods: {
@@ -113,7 +123,31 @@
       },
       handleSizeChange(value) {
         this.pageSize = value;
+      },
+      async loadDetails(row, expandedRows) {
+        if (!expandedRows.includes(row) || this.details(row.id) && !this.details(row.id).error) {
+          return;
+        }
+        this.detailsData = this.detailsData.filter(d => d.id !== row.id);
+        let res = await this.dataApiClient.getDetails(row.id);
+        if (!res.error) {
+          this.detailsData.push({
+            id: row.id,
+            details: 123
+          });
+        } else {
+          this.detailsData.push({
+            id: row.id,
+            error: res.status
+          });
+        }
+      },
+      details(id) {
+        return this.detailsData.find(d => d.id === id);
       }
+    },
+    created() {
+      this.dataApiClient = new DataApiClient(this.$store.getters.access_token);
     },
     computed: {
       unpagedData() {
@@ -133,6 +167,3 @@
   }
 </script>
 
-<style scoped>
-
-</style>
