@@ -1,4 +1,5 @@
 import {Bar, Line} from 'vue-chartjs'
+import moment from 'moment'
 
 export default {
   extends: Line,
@@ -19,6 +20,7 @@ export default {
           type: 'time',
           time: {
             unit: this.timeUnit,
+            isoWeekday: false
           },
           distribution: 'series'
         }],
@@ -30,7 +32,35 @@ export default {
         }]
       },
       responsive: true,
-      maintainAspectRatio: false
+      maintainAspectRatio: false,
+      tooltips: {
+        mode: 'nearest',
+        intersect: false,
+        callbacks: {
+          title: (tooltipItems, data) => {
+            let tooltipItem = tooltipItems[0];
+            let timestamp = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].t;
+            let formatString;
+            switch (this.timeUnit) {
+              case 'day':
+                formatString = 'ddd D, MMM';
+                break;
+              case 'week':
+                formatString = 'D MMM, YYYY, [Week #]WW';
+                break;
+              case 'month':
+                formatString = 'MMM YYYY';
+                break;
+              case 'quarter':
+                formatString = '[Q]Q - YYYY';
+                break;
+              default:
+                formatString = 'MMM D, YYYY';
+            }
+            return timestamp ? moment(timestamp).format(formatString) : '';
+          }
+        }
+      }
     };
     return {
       defOptions
