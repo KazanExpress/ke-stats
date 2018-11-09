@@ -46,7 +46,7 @@ export default {
                 formatString = 'ddd D, MMM';
                 break;
               case 'week':
-                formatString = 'D MMM, YYYY, [Week #]WW';
+                formatString = 'D MMM, YYYY, [Week #]W';
                 break;
               case 'month':
                 formatString = 'MMM YYYY';

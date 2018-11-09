@@ -133,6 +133,14 @@
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
               picker.$emit('pick', [start, end]);
             }
+          }, {
+            text: 'Last year',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 365);
+              picker.$emit('pick', [start, end]);
+            }
           }]
         }
       }

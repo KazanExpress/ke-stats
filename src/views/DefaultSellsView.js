@@ -14,8 +14,6 @@ export default {
       this.loadingState(true);
       try {
         let res = await this.dataApiClient.getData();
-        console.log(res.status);
-        console.log(res.data);
         if (res.error) {
           throw new Error();
         }
