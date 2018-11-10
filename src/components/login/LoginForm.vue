@@ -2,10 +2,11 @@
   <el-form :model="form" status-icon :rules="rules" ref="form" class="form">
     <el-form-item label="Login">
       <el-input v-model="form.username" @keyup.enter.native="submitForm('form')" autocomplete="off"
+                label="login"
                 placeholder="example@mail.com"></el-input>
     </el-form-item>
     <el-form-item label="Password" prop="pass" :error="form.passError" :show-message="form.passErrorShow">
-      <el-input type="password" @keyup.enter.native="submitForm('form')" v-model="form.pass" autocomplete="off"
+      <el-input label="password" type="password" @keyup.enter.native="submitForm('form')" v-model="form.pass" autocomplete="off"
                 placeholder="password"></el-input>
     </el-form-item>
     <el-form-item>

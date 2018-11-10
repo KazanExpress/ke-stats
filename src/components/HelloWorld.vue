@@ -1,6 +1,7 @@
 <template>
   <div class="hello">
     <h1>Home page</h1>
+    {{msg}}
   </div>
 </template>
 
