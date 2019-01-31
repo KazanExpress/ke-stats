@@ -1,4 +1,8 @@
-# untitled1
+# Ke-stats
+
+Project for "JS for Enterprise Development" course.
+
+The SPA for showing important statistics of [KazanExpress.ru](https://kazanexpress.ru)
 
 ## Project setup
 ```
